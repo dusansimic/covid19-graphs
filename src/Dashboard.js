@@ -81,7 +81,7 @@ export default function Dashboard() {
 
 						<Nav className="mr-sm-2">
 							<Nav.Item>
-								<Nav.Link href={`about`}>About</Nav.Link>
+								<Nav.Link href='/about'>About</Nav.Link>
 							</Nav.Item>
 						</Nav>
 					</Navbar>
@@ -93,7 +93,7 @@ export default function Dashboard() {
 					/>
 					<Chart data={parseData(confirmedData, deathsData, recoveredData, country)} />
 					<center><p style={{margin: '30px 0'}}>MIT © <a href="http://dusansimic.me">Dušan Simić</a></p></center>
-					<center><p><a href={`about`}>About</a></p></center>
+					<center><p><a href='/about'>About</a></p></center>
 				</Col>
 			</Row>
 		</Container>

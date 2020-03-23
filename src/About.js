@@ -11,7 +11,7 @@ export default function About() {
 					<Col>
 						<Navbar>
 							<Nav.Item>
-								<Nav.Link href={pkg.homepage}>{'< Back'}</Nav.Link>
+								<Nav.Link href='/'>{'< Back'}</Nav.Link>
 							</Nav.Item>
 						</Navbar>
 						<h3><b>Idea</b></h3>

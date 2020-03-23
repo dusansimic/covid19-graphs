@@ -34,7 +34,7 @@ export default function CountryList(props) {
 			<ListGroup>
 				{
 					countries.map((country, index) => {
-						return (<ListGroup.Item action href={`${pkg.homepage}?country=${country}`} key={index}>
+						return (<ListGroup.Item action href={`/?country=${country}`} key={index}>
 							{country}
 						</ListGroup.Item>);
 					})
