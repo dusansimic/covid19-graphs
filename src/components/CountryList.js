@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {LinkContainer} from 'react-router-bootstrap';
 import {InputGroup, ListGroup, FormControl} from 'react-bootstrap';
 
 export default function CountryList(props) {
@@ -33,9 +34,11 @@ export default function CountryList(props) {
 			<ListGroup>
 				{
 					countries.map((country, index) => {
-						return (<ListGroup.Item action href={`/?country=${country}`} key={index}>
-							{country}
-						</ListGroup.Item>);
+						return (<LinkContainer to={`/?country=${country}`} key={index}>
+							<ListGroup.Item action href={`/?country=${country}`}>
+								{country}
+							</ListGroup.Item>
+						</LinkContainer>);
 					})
 				}
 			</ListGroup>

@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {useLocation} from 'react-router-dom';
+import {useLocation, Link} from 'react-router-dom';
+import {LinkContainer} from 'react-router-bootstrap';
 import {Container, Row, Col, Spinner, Navbar, Nav} from 'react-bootstrap';
 import dayjs from 'dayjs';
 import ky from 'ky';
@@ -13,8 +14,8 @@ import CountryList from './components/CountryList';
 import NumberStatsBar from './components/NumberStatsBar';
 import Chart from './components/Chart';
 
-function useQuery() {
-	return new URLSearchParams(useLocation().search);
+function useQuery(location) {
+	return new URLSearchParams(location.search);
 }
 
 export default function Dashboard() {
@@ -23,7 +24,8 @@ export default function Dashboard() {
 	const [recoveredData, setRecoveredData] = useState();
 	const [date, setDate] = useState();
 	const [country, setCountry] = useState();
-	const query = useQuery();
+	const location = useLocation();
+	const query = useQuery(location);
 
 	async function getData() {
 		const confirmedData = await ky.get('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv').text();
@@ -36,7 +38,10 @@ export default function Dashboard() {
 		setRecoveredData(Papa.parse(recoveredData).data);
 
 		await setDate(dayjs(new Date()).subtract(1, 'day').format('M/D/YY'));
-		await setCountry(query.get('country') ?? 'China');
+	}
+
+	function changeCountry() {
+		setCountry(query.get('country') ?? 'China');
 	}
 
 	function parseData(confirmedData, deathsData, recoveredData, country) {
@@ -65,8 +70,14 @@ export default function Dashboard() {
 
 	useEffect(() => {
 		getData();
+		changeCountry();
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
+	useEffect(() => {
+		changeCountry();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [location]);
 
 	return (isEmpty(confirmedData) || isEmpty(deathsData) || isEmpty(recoveredData) || !date || !country) ? <Spinner animation='border' variant='primary' style={{display: 'block', position: 'fixed', zIndex: '1031', top: '50%', left: '50%', marginTop: '-35px', marginLeft: '-35px'}}/> : (
 		<Container fluid>
@@ -80,7 +91,9 @@ export default function Dashboard() {
 
 						<Nav className="mr-sm-2">
 							<Nav.Item>
-								<Nav.Link href='/about'>About</Nav.Link>
+								<LinkContainer to='/about'>
+									<Nav.Link>About</Nav.Link>
+								</LinkContainer>
 							</Nav.Item>
 						</Nav>
 					</Navbar>
@@ -92,7 +105,7 @@ export default function Dashboard() {
 					/>
 					<Chart data={parseData(confirmedData, deathsData, recoveredData, country)} />
 					<center><p style={{margin: '30px 0'}}>MIT © <a href="http://dusansimic.me">Dušan Simić</a></p></center>
-					<center><p><a href='/about'>About</a></p></center>
+					<center><p><Link to='/about'>About</Link></p></center>
 				</Col>
 			</Row>
 		</Container>

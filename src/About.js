@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Row, Col, Navbar, Nav } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 
 export default function About() {
 	return (
@@ -10,7 +11,9 @@ export default function About() {
 					<Col>
 						<Navbar>
 							<Nav.Item>
-								<Nav.Link href='/'>{'< Back'}</Nav.Link>
+								<LinkContainer to='/'>
+									<Nav.Link>{'< Back'}</Nav.Link>
+								</LinkContainer>
 							</Nav.Item>
 						</Navbar>
 						<h3><b>Idea</b></h3>
