@@ -11,10 +11,10 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route path='/about'>
+        <Route path='http://covid19.dusansimic.me/about'>
           <About/>
         </Route>
-        <Route path='/'>
+        <Route path='http://covid19.dusansimic.me/'>
           <Dashboard/>
         </Route>
       </Switch>
