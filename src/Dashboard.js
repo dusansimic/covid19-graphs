@@ -85,7 +85,7 @@ export default function Dashboard() {
 				<Col lg={2}>
 					<CountryList countries={getCountries(confirmedData)}/>
 				</Col>
-				<Col lg={10}>
+				<Col lg={10} style={{maxHeight: '100vh', overflowY: 'scroll', WebkitOverflowScrolling: 'touch'}}>
 					<Navbar className="justify-content-between">
 						<Navbar.Brand><h2>{country}</h2></Navbar.Brand>
 

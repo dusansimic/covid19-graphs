@@ -31,7 +31,7 @@ export default function CountryList(props) {
 				</InputGroup.Prepend>
 				<FormControl placeholder='China' onChange={handleInputChange}></FormControl>
 			</InputGroup>
-			<ListGroup>
+			<ListGroup style={{maxHeight: 'calc(100vh - 58px)', overflowY:'scroll', WebkitOverflowScrolling: 'touch'}}>
 				{
 					countries.map((country, index) => {
 						return (<LinkContainer to={`/?country=${country}`} key={index}>
