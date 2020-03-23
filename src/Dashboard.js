@@ -79,6 +79,10 @@ export default function Dashboard() {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [location]);
 
+	useEffect(() => {
+		document.title = `COVID-19 Graphs - ${country}`;
+	}, [country]);
+
 	return (isEmpty(confirmedData) || isEmpty(deathsData) || isEmpty(recoveredData) || !date || !country) ? <Spinner animation='border' variant='primary' style={{display: 'block', position: 'fixed', zIndex: '1031', top: '50%', left: '50%', marginTop: '-35px', marginLeft: '-35px'}}/> : (
 		<Container fluid>
 			<Row>
