@@ -12,7 +12,6 @@ import {
 import CountryList from './components/CountryList';
 import NumberStatsBar from './components/NumberStatsBar';
 import Chart from './components/Chart';
-import pkg from '../package.json';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);

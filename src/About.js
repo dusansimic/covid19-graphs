@@ -1,6 +1,5 @@
 import React from 'react';
 import { Container, Row, Col, Navbar, Nav } from 'react-bootstrap';
-import pkg from '../package.json';
 
 export default function About() {
 	return (

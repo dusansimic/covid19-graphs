@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import {InputGroup, ListGroup, FormControl} from 'react-bootstrap';
-import pkg from '../../package.json';
 
 export default function CountryList(props) {
 	const [ready, setReady] = useState();
