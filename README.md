@@ -1,68 +1,18 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Covid-19 Graphs
 
-## Available Scripts
+Website: [covid19.dusansimic.me](http://covid19.dusansimic.me)
 
-In the project directory, you can run:
+This is a small, quick and dirty light web app that I made. My mom who is a medical specialist wanted to see graphs with numbers of Corona virus victims in each country for the past cuple of weeks. There are some sites where you can get that but not for all countries as I've seen. Since it was good for my mom and me I wanted to share it so anyone can check it out.
 
-### `yarn start`
+## Data source
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+All of the data You see here is from [this](https://github.com/CSSEGISandData/COVID-19) GitHub repository. It's created by Center for Systems Science and Engineering at the Johns Hopkins University. You can see all the information about the data sources on that link.
+The data is now always up to date because it's updated once at midnight (23:59h) but it's reliable and could be used for relative representation of the Corona virus situation around the world.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## Open source
 
-### `yarn test`
+This web app is open source under MIT license. Any contributions are very welcome!
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Author
 
-### `yarn build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+[Dušan Simić](https://github.com/dusansimic) ([dusan.simic1810@gmail.com](mailto:dusan.simic1810@gmail.com))
