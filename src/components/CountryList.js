@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {InputGroup, ListGroup, FormControl} from 'react-bootstrap';
+import pkg from '../../package.json';
 
 export default function CountryList(props) {
 	const [ready, setReady] = useState();
@@ -33,7 +34,7 @@ export default function CountryList(props) {
 			<ListGroup>
 				{
 					countries.map((country, index) => {
-						return (<ListGroup.Item action href={`/?country=${country}`} key={index}>
+						return (<ListGroup.Item action href={`${pkg.homepage}?country=${country}`} key={index}>
 							{country}
 						</ListGroup.Item>);
 					})

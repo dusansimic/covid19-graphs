@@ -12,6 +12,7 @@ import {
 import CountryList from './components/CountryList';
 import NumberStatsBar from './components/NumberStatsBar';
 import Chart from './components/Chart';
+import pkg from '../package.json';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -80,7 +81,7 @@ export default function Dashboard() {
 
 						<Nav className="mr-sm-2">
 							<Nav.Item>
-								<Nav.Link href="/about">About</Nav.Link>
+								<Nav.Link href={`${pkg.homepage}/about`}>About</Nav.Link>
 							</Nav.Item>
 						</Nav>
 					</Navbar>
@@ -91,8 +92,8 @@ export default function Dashboard() {
 						recovered={getDataFromDate(recoveredData, date, country)}
 					/>
 					<Chart data={parseData(confirmedData, deathsData, recoveredData, country)} />
-					<p style={{margin: '30px 0'}}><center>MIT © <a href="http://dusansimic.me">Dušan Simić</a></center></p>
-					<p><center><a href="/about">About</a></center></p>
+					<center><p style={{margin: '30px 0'}}>MIT © <a href="http://dusansimic.me">Dušan Simić</a></p></center>
+					<center><p><a href={`${pkg.homepage}/about`}>About</a></p></center>
 				</Col>
 			</Row>
 		</Container>
