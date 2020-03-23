@@ -12,10 +12,10 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route path={`${pkg.homepage}/about`}>
+        <Route path='/about'>
           <About/>
         </Route>
-        <Route path={pkg.homepage}>
+        <Route path='/'>
           <Dashboard/>
         </Route>
       </Switch>
