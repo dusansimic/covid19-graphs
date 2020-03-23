@@ -11,10 +11,10 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route path={`${process.env.PUBLIC_URL}/about`}>
+        <Route exact path={`${process.env.PUBLIC_URL}/about`}>
           <About/>
         </Route>
-        <Route path={`${process.env.PUBLIC_URL}/`}>
+        <Route exact path={`${process.env.PUBLIC_URL}/`}>
           <Dashboard/>
         </Route>
       </Switch>
