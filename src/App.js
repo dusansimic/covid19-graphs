@@ -11,10 +11,10 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route path='http://covid19.dusansimic.me/about'>
+        <Route path={`${process.env.PUBLIC_URL}/about`}>
           <About/>
         </Route>
-        <Route path='http://covid19.dusansimic.me/'>
+        <Route path={`${process.env.PUBLIC_URL}/`}>
           <Dashboard/>
         </Route>
       </Switch>
