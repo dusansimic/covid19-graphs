@@ -6,15 +6,16 @@ import {
 } from 'react-router-dom';
 import Dashboard from './Dashboard';
 import About from './About';
+import pkg from '../package.json';
 
 function App() {
   return (
     <Router>
       <Switch>
-        <Route path='/about'>
+        <Route path={`${pkg.homepage}/about`}>
           <About/>
         </Route>
-        <Route path='/'>
+        <Route path={pkg.homepage}>
           <Dashboard/>
         </Route>
       </Switch>
