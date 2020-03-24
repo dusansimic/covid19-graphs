@@ -8,7 +8,8 @@ import Papa from 'papaparse';
 import {isEmpty} from 'lodash';
 import {
 	getDataFromDate,
-	getCountries
+	getCountries,
+	parseData
 } from './common';
 import CountryList from './components/CountryList';
 import NumberStatsBar from './components/NumberStatsBar';
@@ -36,36 +37,13 @@ export default function Dashboard() {
 
 		const recoveredData = await ky.get('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv').text();
 		setRecoveredData(Papa.parse(recoveredData).data);
+		console.log(dayjs(new Date()).subtract(1, 'day').format('M/D/YY'));
 
-		await setDate(dayjs(new Date()).subtract(1, 'day').format('M/D/YY'));
+		setDate(dayjs(new Date()).subtract(1, 'day').format('M/D/YY'));
 	}
 
 	function changeCountry() {
 		setCountry(query.get('country') ?? 'China');
-	}
-
-	function parseData(confirmedData, deathsData, recoveredData, country) {
-		const result = {datasets: [
-			{label: 'Confirmed', data: [], backgroundColor: '#fcba03', borderColor: '#fcba0355', fill: false},
-			{label: 'Active', data: [], backgroundColor: '#3a33ff', borderColor: '#3a33ff55', fill: false},
-			{label: 'Deaths', data: [], backgroundColor: '#ff0000', borderColor: '#ff000055', fill: false},
-			{label: 'Recovered', data: [], backgroundColor: '#1cb800', borderColor: '#1cb80055', fill: false}
-		], labels: []};
-		let date = dayjs(new Date()).subtract(1, 'day');
-
-		while (date.format('YYYY/MM/DD') !== '2020/01/31') {
-			result.labels.unshift(date.format('DD. MM.'));
-			const confirmedDataFromDate = getDataFromDate(confirmedData, date.format('M/D/YY'), country);
-			const deathsDataFromDate = getDataFromDate(deathsData, date.format('M/D/YY'), country);
-			const recoveredDataFromDate = getDataFromDate(recoveredData, date.format('M/D/YY'), country);
-			result.datasets[0].data.unshift(confirmedDataFromDate);
-			result.datasets[1].data.unshift(confirmedDataFromDate - deathsDataFromDate - recoveredDataFromDate);
-			result.datasets[2].data.unshift(deathsDataFromDate);
-			result.datasets[3].data.unshift(recoveredDataFromDate);
-			date = date.subtract(1, 'day');
-		}
-
-		return result;
 	}
 
 	useEffect(() => {
