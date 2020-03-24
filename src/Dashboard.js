@@ -5,15 +5,20 @@ import {Container, Row, Col, Spinner, Navbar, Nav} from 'react-bootstrap';
 import dayjs from 'dayjs';
 import ky from 'ky';
 import Papa from 'papaparse';
-import {isEmpty} from 'lodash';
+import {isEmpty, zip} from 'lodash';
 import {
-	getDataFromDate,
-	getCountries,
-	parseData
+	parseData,
+	removeStatProp,
+	getStats,
+	parseDiffData
 } from './common';
+import countryList from './countryHardcodedList';
 import CountryList from './components/CountryList';
 import NumberStatsBar from './components/NumberStatsBar';
-import Chart from './components/Chart';
+import {
+	Line as LineChart,
+	Bar as BarChart
+} from 'react-chartjs-2';
 
 function useQuery(location) {
 	return new URLSearchParams(location.search);
@@ -23,7 +28,9 @@ export default function Dashboard() {
 	const [confirmedData, setConfirmedData] = useState();
 	const [deathsData, setDeathsData] = useState();
 	const [recoveredData, setRecoveredData] = useState();
-	const [date, setDate] = useState();
+	const [newConfirmedData, setNewConfirmedData] = useState();
+	const [newDeathsData, setNewDeathsData] = useState();
+	const [dates, setDates] = useState();
 	const [country, setCountry] = useState();
 	const [chartScaleType, setChartScaleType] = useState('linear');
 	const location = useLocation();
@@ -47,17 +54,22 @@ export default function Dashboard() {
 		}
 	};
 
-	async function getData() {
-		const confirmedData = await ky.get('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv').text();
-		setConfirmedData(Papa.parse(confirmedData).data);
+	async function getNewData() {
+		if (country === undefined) {
+			return;
+		}
 
-		const deathsData = await ky.get('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv').text();
-		setDeathsData(Papa.parse(deathsData).data);
+		const newData = await ky.get(`https://thevirustracker.com/free-api?countryTimeline=${countryList().find(obj => obj.name === country).timelineCode}`).json();
 
-		const recoveredData = await ky.get('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv').text();
-		setRecoveredData(Papa.parse(recoveredData).data);
-
-		setDate(dayjs(new Date()).subtract(1, 'day').format('M/D/YY'));
+		const timelineItems = removeStatProp(newData.timelineitems[0]);
+		const dates = Object.entries(timelineItems).map(arr => dayjs(arr[0]));
+		setDates(dates);
+		const zipped = zip(...(Object.entries(timelineItems).map(arr => Object.entries(arr[1]).map(arr => arr[1]))));
+		setNewConfirmedData(zipped[0]);
+		setNewDeathsData(zipped[1]);
+		setConfirmedData(zipped[2]);
+		setDeathsData(zipped[4]);
+		setRecoveredData(zipped[3]);
 	}
 
 	function changeCountry() {
@@ -65,7 +77,6 @@ export default function Dashboard() {
 	}
 
 	useEffect(() => {
-		getData();
 		changeCountry();
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
@@ -76,14 +87,15 @@ export default function Dashboard() {
 	}, [location]);
 
 	useEffect(() => {
+		getNewData();
 		document.title = `COVID-19 Graphs - ${country}`;
 	}, [country]);
 
-	return (isEmpty(confirmedData) || isEmpty(deathsData) || isEmpty(recoveredData) || !date || !country) ? <Spinner animation='border' variant='primary' style={{display: 'block', position: 'fixed', zIndex: '1031', top: '50%', left: '50%', marginTop: '-35px', marginLeft: '-35px'}}/> : (
+	return (isEmpty(confirmedData) || isEmpty(deathsData) || isEmpty(recoveredData) || !dates || !country) ? <Spinner animation='border' variant='primary' style={{display: 'block', position: 'fixed', zIndex: '1031', top: '50%', left: '50%', marginTop: '-35px', marginLeft: '-35px'}}/> : (
 		<Container fluid>
 			<Row>
 				<Col lg={2}>
-					<CountryList countries={getCountries(confirmedData)}/>
+					<CountryList countries={countryList().map(country => country.name)}/>
 				</Col>
 				<Col lg={10} style={{maxHeight: '100vh', overflowY: 'scroll', WebkitOverflowScrolling: 'touch'}}>
 					<Navbar className="justify-content-between">
@@ -98,10 +110,12 @@ export default function Dashboard() {
 						</Nav>
 					</Navbar>
 					<NumberStatsBar
-						confirmed={getDataFromDate(confirmedData, date, country)}
-						active={getDataFromDate(confirmedData, date, country) - getDataFromDate(deathsData, date, country) - getDataFromDate(recoveredData, date, country)}
-						deaths={getDataFromDate(deathsData, date, country)}
-						recovered={getDataFromDate(recoveredData, date, country)}
+						confirmed={getStats(confirmedData)}
+						newConfirmed={getStats(newConfirmedData)}
+						active={getStats(confirmedData) - getStats(deathsData) - getStats(recoveredData)}
+						deaths={getStats(deathsData)}
+						newDeaths={getStats(newDeathsData)}
+						recovered={getStats(recoveredData)}
 					/>
 					<Nav variant='tabs' style={{marginTop: '10px'}} activeKey={chartScaleType} onSelect={setChartScaleType}>
 						<Nav.Item>
@@ -111,7 +125,15 @@ export default function Dashboard() {
 							<Nav.Link eventKey='logarithmic'>Logarithmic</Nav.Link>
 						</Nav.Item>
 					</Nav>
-					<Chart data={parseData(confirmedData, deathsData, recoveredData, country)} options={chartOptions}/>
+					<LineChart data={parseData(confirmedData, deathsData, recoveredData, dates)} options={chartOptions}/>
+					<Row>
+						<Col>
+							<BarChart data={parseDiffData(newConfirmedData, dates)}/>
+						</Col>
+						<Col>
+							<BarChart data={parseDiffData(newDeathsData, dates)}/>
+						</Col>
+					</Row>
 					<center><p style={{margin: '30px 0'}}>MIT © <a href="http://dusansimic.me">Dušan Simić</a></p></center>
 					<center><p><Link to='/about'>About</Link></p></center>
 				</Col>
