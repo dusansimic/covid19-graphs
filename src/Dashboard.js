@@ -25,8 +25,27 @@ export default function Dashboard() {
 	const [recoveredData, setRecoveredData] = useState();
 	const [date, setDate] = useState();
 	const [country, setCountry] = useState();
+	const [chartScaleType, setChartScaleType] = useState('linear');
 	const location = useLocation();
 	const query = useQuery(location);
+
+	const chartOptions = {
+		scales: {
+			yAxes: [
+				{
+					type: chartScaleType
+				}
+			]
+		},
+		tooltips: {
+			mode: 'index',
+			intersect: false
+		},
+		hover	: {
+			mode: 'index',
+			intersect: true
+		}
+	};
 
 	async function getData() {
 		const confirmedData = await ky.get('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv').text();
@@ -37,7 +56,6 @@ export default function Dashboard() {
 
 		const recoveredData = await ky.get('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv').text();
 		setRecoveredData(Papa.parse(recoveredData).data);
-		console.log(dayjs(new Date()).subtract(1, 'day').format('M/D/YY'));
 
 		setDate(dayjs(new Date()).subtract(1, 'day').format('M/D/YY'));
 	}
@@ -85,7 +103,15 @@ export default function Dashboard() {
 						deaths={getDataFromDate(deathsData, date, country)}
 						recovered={getDataFromDate(recoveredData, date, country)}
 					/>
-					<Chart data={parseData(confirmedData, deathsData, recoveredData, country)} />
+					<Nav variant='tabs' style={{marginTop: '10px'}} activeKey={chartScaleType} onSelect={setChartScaleType}>
+						<Nav.Item>
+							<Nav.Link eventKey='linear'>Linear</Nav.Link>
+						</Nav.Item>
+						<Nav.Item>
+							<Nav.Link eventKey='logarithmic'>Logarithmic</Nav.Link>
+						</Nav.Item>
+					</Nav>
+					<Chart data={parseData(confirmedData, deathsData, recoveredData, country)} options={chartOptions}/>
 					<center><p style={{margin: '30px 0'}}>MIT © <a href="http://dusansimic.me">Dušan Simić</a></p></center>
 					<center><p><Link to='/about'>About</Link></p></center>
 				</Col>

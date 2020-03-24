@@ -17,10 +17,34 @@ export const getCountries = data => uniq(data.slice(1).map(row => row[1])).sort(
 
 export function parseData(confirmedData, deathsData, recoveredData, country) {
 	const result = {datasets: [
-		{label: 'Confirmed', data: [], backgroundColor: '#fcba03', borderColor: '#fcba0355', fill: false},
-		{label: 'Active', data: [], backgroundColor: '#3a33ff', borderColor: '#3a33ff55', fill: false},
-		{label: 'Deaths', data: [], backgroundColor: '#ff0000', borderColor: '#ff000055', fill: false},
-		{label: 'Recovered', data: [], backgroundColor: '#1cb800', borderColor: '#1cb80055', fill: false}
+		{
+			label: 'Confirmed',
+			data: [],
+			backgroundColor: '#fcba03',
+			borderColor: '#fcba0355',
+			fill: false
+		},
+		{
+			label: 'Active',
+			data: [],
+			backgroundColor: '#3a33ff',
+			borderColor: '#3a33ff55',
+			fill: false
+		},
+		{
+			label: 'Deaths',
+			data: [],
+			backgroundColor: '#ff0000',
+			borderColor: '#ff000055',
+			fill: false
+		},
+		{
+			label: 'Recovered',
+			data: [],
+			backgroundColor: '#1cb800',
+			borderColor: '#1cb80055',
+			fill: false
+		}
 	], labels: []};
 	let date = dayjs(new Date()).subtract(1, 'day');
 
