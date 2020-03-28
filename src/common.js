@@ -1,5 +1,4 @@
 import {zip, sum, uniq, zipWith} from 'lodash';
-import dayjs from 'dayjs';
 
 export const getStats = data => data[data.length - 1];
 
@@ -67,8 +66,3 @@ export function parseDiffData(data, dates) {
 
 	return result;
 }
-
-export const removeStatProp = data => {
-	delete data['stat'];
-	return data;
-};

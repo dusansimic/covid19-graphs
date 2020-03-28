@@ -4,11 +4,9 @@ import {LinkContainer} from 'react-router-bootstrap';
 import {Container, Row, Col, Spinner, Navbar, Nav} from 'react-bootstrap';
 import dayjs from 'dayjs';
 import ky from 'ky';
-import Papa from 'papaparse';
 import {isEmpty, zip} from 'lodash';
 import {
 	parseData,
-	removeStatProp,
 	getStats,
 	parseDiffData
 } from './common';
@@ -59,17 +57,16 @@ export default function Dashboard() {
 			return;
 		}
 
-		const newData = await ky.get(`https://thevirustracker.com/free-api?countryTimeline=${countryList().find(obj => obj.name === country).timelineCode}`).json();
+		const newData = await ky.get(`http://covid19.dusansimic.me/api/v1/timeline?country=${country}`).json();
 
-		const timelineItems = removeStatProp(newData.timelineitems[0]);
-		const dates = Object.entries(timelineItems).map(arr => dayjs(arr[0]));
+		const dates = newData.map(day => dayjs(day.date));
 		setDates(dates);
-		const zipped = zip(...(Object.entries(timelineItems).map(arr => Object.entries(arr[1]).map(arr => arr[1]))));
-		setNewConfirmedData(zipped[0]);
-		setNewDeathsData(zipped[1]);
-		setConfirmedData(zipped[2]);
-		setDeathsData(zipped[4]);
-		setRecoveredData(zipped[3]);
+		const zipped = zip(...newData.map(day => Object.values(day)));
+		setConfirmedData(zipped[1])
+		setNewConfirmedData(zipped[2])
+		setDeathsData(zipped[3])
+		setNewDeathsData(zipped[4])
+		setRecoveredData(zipped[5])
 	}
 
 	function changeCountry() {
@@ -89,6 +86,7 @@ export default function Dashboard() {
 	useEffect(() => {
 		getNewData();
 		document.title = `COVID-19 Graphs - ${country}`;
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [country]);
 
 	return (isEmpty(confirmedData) || isEmpty(deathsData) || isEmpty(recoveredData) || !dates || !country) ? <Spinner animation='border' variant='primary' style={{display: 'block', position: 'fixed', zIndex: '1031', top: '50%', left: '50%', marginTop: '-35px', marginLeft: '-35px'}}/> : (
